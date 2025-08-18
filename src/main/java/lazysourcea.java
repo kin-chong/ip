@@ -15,6 +15,7 @@ public class lazysourcea {
         String bye = "bye.";
         String byeline = "----";
 
+        TaskList tasks = new TaskList(100);
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hello from\n" + logo);
@@ -29,12 +30,23 @@ public class lazysourcea {
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("bye")) {
-                System.out.println(byeline);
-                System.out.println(bye);
-                System.out.println(byeline);
+                System.out.print(bye);
                 break;
+            } else if (input.equalsIgnoreCase("list")) {
+                try {
+                    String[] all = tasks.toArray();
+                    for (int i = 0; i < all.length; i++) {
+                        System.out.println((i + 1) + ". " + all[i]);
+                    }
+                } catch (EmptyTaskListException e) {
+                    System.out.println(e.getMessage());
+                }
             } else {
-                System.out.println(input);
+                if (tasks.add(input)) {
+                    System.out.println("added: " + input);
+                } else {
+                    System.out.println("Sorry, task list is full (100 items).");
+                }
             }
         }
         scanner.close();
