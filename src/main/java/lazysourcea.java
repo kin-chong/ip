@@ -15,7 +15,7 @@ public class lazysourcea {
         String bye = "bye.";
         String byeline = "----";
 
-        TaskList tasks = new TaskList(100);
+        TaskList taskList = new TaskList();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hello from\n" + logo);
@@ -33,20 +33,31 @@ public class lazysourcea {
                 System.out.print(bye);
                 break;
             } else if (input.equalsIgnoreCase("list")) {
+                taskList.listTasks();
+            } else if (input.startsWith("mark ")) {
                 try {
-                    String[] all = tasks.toArray();
-                    for (int i = 0; i < all.length; i++) {
-                        System.out.println((i + 1) + ". " + all[i]);
-                    }
-                } catch (EmptyTaskListException e) {
-                    System.out.println(e.getMessage());
+                    int index = Integer.parseInt(input.substring(5)) - 1;
+                    Task t = taskList.get(index);
+                    t.markAsDone();
+                    System.out.println("task marked as done:");
+                    System.out.println("  " + t);
+                } catch (Exception e) {
+                    System.out.println("invalid task number");
+                }
+            } else if (input.startsWith("unmark ")) {
+                try {
+                    int index = Integer.parseInt(input.substring(7)) - 1;
+                    Task t = taskList.get(index);
+                    t.markAsNotDone();
+                    System.out.println("task unmarked as done:");
+                    System.out.println("  " + t);
+                } catch (Exception e) {
+                    System.out.println("invalid task number");
                 }
             } else {
-                if (tasks.add(input)) {
-                    System.out.println("added: " + input);
-                } else {
-                    System.out.println("Sorry, task list is full (100 items).");
-                }
+                Task newTask = new Task(input);
+                taskList.add(newTask);
+                System.out.println("added: " + newTask);
             }
         }
         scanner.close();

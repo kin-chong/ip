@@ -1,25 +1,32 @@
-public class TaskList {
-    private final String[] items;
-    private int count = 0;
+import java.util.ArrayList;
 
-    public TaskList(int capacity) {
-        items = new String[capacity];
+public class TaskList {
+    private final ArrayList<Task> items;
+
+    public TaskList() {
+        this.items = new ArrayList<>();
     }
 
-    public boolean add(String task) {
-        if (count >= items.length) return false;
-        items[count++] = task;
-        return true;
+    public void add(Task task) {
+        items.add(task);
     }
 
     public int size() {
-        return count;
+        return items.size();
     }
 
-    public String[] toArray() throws EmptyTaskListException {
-        if (count == 0) {
-            throw new EmptyTaskListException("list empty pls (¬_¬)");
+    public Task get(int index) throws IndexOutOfBoundsException {
+        return items.get(index);
+    }
+
+    public void listTasks() {
+        if (items.isEmpty()) {
+            System.out.println("(no tasks yet)");
+        } else {
+            System.out.println("your tasks:");
+            for (int i = 0; i < items.size(); i++) {
+                System.out.println((i + 1) + "." + items.get(i));
+            }
         }
-        return java.util.Arrays.copyOf(items, count);
     }
 }
