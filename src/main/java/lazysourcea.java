@@ -3,6 +3,9 @@ import java.util.Scanner;
 public class lazysourcea {
     public static void main(String[] args) {
 
+        TaskList taskList = new TaskList();
+        Scanner scanner = new Scanner(System.in);
+
         final String RESET = "\033[0m";
         String logo = """
                      _
@@ -15,11 +18,7 @@ public class lazysourcea {
 
         String greeting = "hi. i'm lazysourcea.\nwhat do you want to do?";
         String greetingline = "-----------------------";
-
         String bye = "bye.";
-
-        TaskList taskList = new TaskList();
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hello from\n" + logo);
 
@@ -94,7 +93,7 @@ public class lazysourcea {
                         Task deadline = new Deadline(desc, by);
                         taskList.add(deadline);
                         System.out.println("ok. task added:\n  " + deadline);
-                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                        System.out.println("now you have " + taskList.size() + " task(s) in the list.");
                     } catch (Exception e) {
                         System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>");
                     }
@@ -109,9 +108,23 @@ public class lazysourcea {
                         Task event = new Event(desc, from, to);
                         taskList.add(event);
                         System.out.println("ok. task added:\n  " + event);
-                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                        System.out.println("now you have " + taskList.size() + " task(s) in the list.");
                     } catch (Exception e) {
                         System.out.println("oi.. invalid event format.\nuse: event <desc> /from <time> /to <time>");
+                    }
+                    break;
+
+                case "delete":
+                    try {
+                        int index = Integer.parseInt(argument) - 1;
+                        Task removedTask = taskList.remove(index);
+                        System.out.println("task:");
+                        System.out.println("  " + removedTask + "\nremoved.");
+                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    } catch (NumberFormatException e) {
+                        System.out.println("oi.. give valid task number pls.\nUsage: delete <number>");
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("task number out of range lah.");
                     }
                     break;
 

@@ -19,6 +19,10 @@ public class TaskList {
         return items.get(index);
     }
 
+    public Task remove(int index) throws IndexOutOfBoundsException {
+        return items.remove(index);
+    }
+
     public void listTasks() {
         if (items.isEmpty()) {
             System.out.println("(no tasks yet)");
