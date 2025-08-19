@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class lazysourcea {
     public static void main(String[] args) {
+
+        final String RESET = "\033[0m";
         String logo = """
                      _
                     | | __ _ _____   _ ___  ___  _   _ _ __ ___ ___  __ _
@@ -24,6 +26,7 @@ public class lazysourcea {
         System.out.println(greetingline);
         System.out.println(greeting);
         System.out.println(greetingline);
+        System.out.println("enter help for available commands");
 
         boolean running = true;
 
@@ -56,7 +59,7 @@ public class lazysourcea {
                         t.markAsDone();
                         System.out.println("task marked as done:\n " + t);
                     } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        System.out.println("invalid task number");
+                        System.out.println("invalid task number. use: mark <number>");
                     }
                     break;
 
@@ -68,13 +71,13 @@ public class lazysourcea {
                         t.markAsNotDone();
                         System.out.println("task marked as done:\n " + t);
                     } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        System.out.println("invalid task number");
+                        System.out.println("invalid task number. use: unmark <number>");
                     }
                     break;
 
                 case "todo":
                     if (argument.isEmpty()) {
-                        System.out.println("tsk. todo description cannot empty");
+                        System.out.println("tsk.. todo description cannot empty.\nuse: todo <desc>");
                     } else {
                         Task todo = new Todo(argument);
                         taskList.add(todo);
@@ -93,7 +96,7 @@ public class lazysourcea {
                         System.out.println("ok. task added:\n  " + deadline);
                         System.out.println("now you have " + taskList.size() + " tasks in the list.");
                     } catch (Exception e) {
-                        System.out.println("oi invalid deadline format. use: deadline <desc> /by <time>");
+                        System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>");
                     }
                     break;
 
@@ -108,18 +111,24 @@ public class lazysourcea {
                         System.out.println("ok. task added:\n  " + event);
                         System.out.println("now you have " + taskList.size() + " tasks in the list.");
                     } catch (Exception e) {
-                        System.out.println("oi invalid event format. use: event <desc> /from <time> /to <time>");
+                        System.out.println("oi.. invalid event format.\nuse: event <desc> /from <time> /to <time>");
                     }
                     break;
 
+                case "help":
+                    System.out.println("list:           shows your tasklist");
+                    System.out.println("todo:           adds a todo task. use: todo <desc>");
+                    System.out.println("deadline:       adds a deadline task. use: deadline <desc> /by <time>");
+                    System.out.println("event:          adds a event task. use: event <desc> /from <time> /to <time>");
+                    System.out.println("mark:           marks a task in the list. use: mark <number>");
+                    System.out.println("unmark:         unmarks a task in the list. use: unmark <number>");
+                    break;
+
                 default:
-                    // any other input becomes new task
                     if (!input.isEmpty()) {
-                        Task newTask = new Task(input);
-                        taskList.add(newTask);
-                        System.out.println("added: " + newTask);
+                        System.out.println("tsk what u saying. i don't understand");
                     } else {
-                        System.out.println("oi enter something leh");
+                        System.out.println("oi.. enter something leh");
                     }
                     break;
             }
