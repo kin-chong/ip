@@ -10,15 +10,22 @@ Hello from
 hi. i'm lazysourcea.
 what do you want to do?
 -----------------------
+enter help for available commands
 >>> ok. task added:
   [T][ ] read
 now you have 1 tasks in the list.
 >>> ok. task added:
   [D][ ] homework (by: Sunday)
-now you have 2 tasks in the list.
+now you have 2 task(s) in the list.
 >>> task marked as done:
  [T][X] read
 >>> your tasks:
 1.[T][X] read
 2.[D][ ] homework (by: Sunday)
+>>> task:
+  [D][ ] homework (by: Sunday)
+removed.
+now you have 1 tasks in the list.
+>>> your tasks:
+1.[T][X] read
 >>> bye.

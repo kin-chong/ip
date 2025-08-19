@@ -2,4 +2,6 @@ todo read
 deadline homework /by Sunday
 mark 1
 list
+delete 2
+list
 bye
