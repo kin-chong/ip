@@ -54,8 +54,7 @@ public class lazysourcea {
                         int index = Integer.parseInt(argument) - 1;
                         Task t = taskList.get(index); // may throw IndexOutOfBoundsException
                         t.markAsDone();
-                        System.out.println("task marked as done:");
-                        System.out.println("  " + t);
+                        System.out.println("task marked as done:\n " + t);
                     } catch (NumberFormatException | IndexOutOfBoundsException e) {
                         System.out.println("invalid task number");
                     }
@@ -67,10 +66,49 @@ public class lazysourcea {
                         int index = Integer.parseInt(argument) - 1;
                         Task t = taskList.get(index); // may throw IndexOutOfBoundsException
                         t.markAsNotDone();
-                        System.out.println("task unmarked as done:");
-                        System.out.println("  " + t);
+                        System.out.println("task marked as done:\n " + t);
                     } catch (NumberFormatException | IndexOutOfBoundsException e) {
                         System.out.println("invalid task number");
+                    }
+                    break;
+
+                case "todo":
+                    if (argument.isEmpty()) {
+                        System.out.println("tsk. todo description cannot empty");
+                    } else {
+                        Task todo = new Todo(argument);
+                        taskList.add(todo);
+                        System.out.println("ok. task added:\n  " + todo);
+                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    }
+                    break;
+
+                case "deadline":
+                    try {
+                        String[] deadlineParts = argument.split("/by", 2);
+                        String desc = deadlineParts[0].trim();
+                        String by = deadlineParts[1].trim();
+                        Task deadline = new Deadline(desc, by);
+                        taskList.add(deadline);
+                        System.out.println("ok. task added:\n  " + deadline);
+                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    } catch (Exception e) {
+                        System.out.println("oi invalid deadline format. use: deadline <desc> /by <time>");
+                    }
+                    break;
+
+                case "event":
+                    try {
+                        String[] eventParts = argument.split("/from|/to");
+                        String desc = eventParts[0].trim();
+                        String from = eventParts[1].trim();
+                        String to = eventParts[2].trim();
+                        Task event = new Event(desc, from, to);
+                        taskList.add(event);
+                        System.out.println("ok. task added:\n  " + event);
+                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    } catch (Exception e) {
+                        System.out.println("oi invalid event format. use: event <desc> /from <time> /to <time>");
                     }
                     break;
 
