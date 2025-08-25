@@ -1,9 +1,14 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class lazysourcea {
-    public static void main(String[] args) {
+    private static final DateTimeFormatter IN_ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter IN_SLASH = DateTimeFormatter.ofPattern("d/M/yyyy");
 
+    public static void main(String[] args) {
         Storage storage = new Storage("data", "lazysourcea.txt");
 
         TaskList taskList = new TaskList();
@@ -100,14 +105,15 @@ public class lazysourcea {
                 try {
                     String[] deadlineParts = argument.split("/by", 2);
                     String desc = deadlineParts[0].trim();
-                    String by = deadlineParts[1].trim();
+                    LocalDate by = parseDate(deadlineParts[1]);
                     Task deadline = new Deadline(desc, by);
                     taskList.add(deadline);
                     System.out.println("ok. task added:\n  " + deadline);
                     System.out.println("now you have " + taskList.size() + " task(s) in the list.");
                     saveNow(storage, taskList);
                 } catch (Exception e) {
-                    System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>");
+                    System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>"
+                            + "\naccepted: yyyy-MM-dd (e.g., 2019-10-15) or d/M/yyyy (e.g., 2/12/2019)");
                 }
                 break;
 
@@ -145,7 +151,8 @@ public class lazysourcea {
             case "help":
                 System.out.println("list:           shows your tasklist");
                 System.out.println("todo:           adds a todo task. use: todo <desc>");
-                System.out.println("deadline:       adds a deadline task. use: deadline <desc> /by <time>");
+                System.out.println("deadline:       adds a deadline task. use: deadline <desc> /by <time> " +
+                        "[accepted: yyyy-MM-dd (e.g., 2019-10-15) or d/M/yyyy (e.g., 2/12/2019)]");
                 System.out.println("event:          adds a event task. use: event <desc> /from <time> /to <time>");
                 System.out.println("mark:           marks a task in the list. use: mark <number>");
                 System.out.println("unmark:         unmarks a task in the list. use: unmark <number>");
@@ -165,5 +172,16 @@ public class lazysourcea {
 
     private static void saveNow(Storage storage, TaskList taskList) {
         storage.save(taskList.asList());
+    }
+
+    private static LocalDate parseDate(String raw) {
+        String s = raw.trim();
+        try {
+            // Try ISO first
+            return LocalDate.parse(s, IN_ISO);
+        } catch (DateTimeParseException ignored) {
+            // Fallback: 2/12/2019 -> Dec 2 2019
+            return LocalDate.parse(s, IN_SLASH);
+        }
     }
 }
