@@ -1,12 +1,20 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class lazysourcea {
     public static void main(String[] args) {
 
+        Storage storage = new Storage("data", "lazysourcea.txt");
+
         TaskList taskList = new TaskList();
+
+        ArrayList<Task> loaded = storage.load();
+        for (Task t : loaded) {
+            taskList.add(t);
+        }
+
         Scanner scanner = new Scanner(System.in);
 
-        final String RESET = "\033[0m";
         String logo = """
                      _
                     | | __ _ _____   _ ___  ___  _   _ _ __ ___ ___  __ _
@@ -40,112 +48,122 @@ public class lazysourcea {
             String argument = (parts.length > 1) ? parts[1].trim() : "";
 
             switch (command) {
-                case "bye":
-                    System.out.print(bye);
-                    running = false; // exit loop
-                    break;
+            case "bye":
+                System.out.print(bye);
+                running = false; // exit loop
+                break;
 
-                case "list":
-                    // call taskList class to list tasks
-                    taskList.listTasks();
-                    break;
+            case "list":
+                // call taskList class to list tasks
+                taskList.listTasks();
+                break;
 
-                case "mark":
-                    // mark task as done
-                    try {
-                        int index = Integer.parseInt(argument) - 1;
-                        Task t = taskList.get(index); // may throw IndexOutOfBoundsException
-                        t.markAsDone();
-                        System.out.println("task marked as done:\n " + t);
-                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        System.out.println("invalid task number. use: mark <number>");
-                    }
-                    break;
+            case "mark":
+                // mark task as done
+                try {
+                    int index = Integer.parseInt(argument) - 1;
+                    Task t = taskList.get(index); // may throw IndexOutOfBoundsException
+                    t.markAsDone();
+                    System.out.println("task marked as done:\n " + t);
+                    saveNow(storage, taskList);
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println("invalid task number. use: mark <number>");
+                }
+                break;
 
-                case "unmark":
-                    // unmark a previously marked task
-                    try {
-                        int index = Integer.parseInt(argument) - 1;
-                        Task t = taskList.get(index); // may throw IndexOutOfBoundsException
-                        t.markAsNotDone();
-                        System.out.println("task marked as done:\n " + t);
-                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        System.out.println("invalid task number. use: unmark <number>");
-                    }
-                    break;
+            case "unmark":
+                // unmark a previously marked task
+                try {
+                    int index = Integer.parseInt(argument) - 1;
+                    Task t = taskList.get(index); // may throw IndexOutOfBoundsException
+                    t.markAsNotDone();
+                    System.out.println("task marked as undone:\n " + t);
+                    saveNow(storage, taskList);
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println("invalid task number. use: unmark <number>");
+                }
+                break;
 
-                case "todo":
-                    if (argument.isEmpty()) {
-                        System.out.println("tsk.. todo description cannot empty.\nuse: todo <desc>");
-                    } else {
-                        Task todo = new Todo(argument);
-                        taskList.add(todo);
-                        System.out.println("ok. task added:\n  " + todo);
-                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
-                    }
-                    break;
+            case "todo":
+                if (argument.isEmpty()) {
+                    System.out.println("tsk.. todo description cannot empty.\nuse: todo <desc>");
+                } else {
+                    Task todo = new Todo(argument);
+                    taskList.add(todo);
+                    System.out.println("ok. task added:\n  " + todo);
+                    System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    saveNow(storage, taskList);
+                }
+                break;
 
-                case "deadline":
-                    try {
-                        String[] deadlineParts = argument.split("/by", 2);
-                        String desc = deadlineParts[0].trim();
-                        String by = deadlineParts[1].trim();
-                        Task deadline = new Deadline(desc, by);
-                        taskList.add(deadline);
-                        System.out.println("ok. task added:\n  " + deadline);
-                        System.out.println("now you have " + taskList.size() + " task(s) in the list.");
-                    } catch (Exception e) {
-                        System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>");
-                    }
-                    break;
+            case "deadline":
+                try {
+                    String[] deadlineParts = argument.split("/by", 2);
+                    String desc = deadlineParts[0].trim();
+                    String by = deadlineParts[1].trim();
+                    Task deadline = new Deadline(desc, by);
+                    taskList.add(deadline);
+                    System.out.println("ok. task added:\n  " + deadline);
+                    System.out.println("now you have " + taskList.size() + " task(s) in the list.");
+                    saveNow(storage, taskList);
+                } catch (Exception e) {
+                    System.out.println("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>");
+                }
+                break;
 
-                case "event":
-                    try {
-                        String[] eventParts = argument.split("/from|/to");
-                        String desc = eventParts[0].trim();
-                        String from = eventParts[1].trim();
-                        String to = eventParts[2].trim();
-                        Task event = new Event(desc, from, to);
-                        taskList.add(event);
-                        System.out.println("ok. task added:\n  " + event);
-                        System.out.println("now you have " + taskList.size() + " task(s) in the list.");
-                    } catch (Exception e) {
-                        System.out.println("oi.. invalid event format.\nuse: event <desc> /from <time> /to <time>");
-                    }
-                    break;
+            case "event":
+                try {
+                    String[] eventParts = argument.split("/from|/to");
+                    String desc = eventParts[0].trim();
+                    String from = eventParts[1].trim();
+                    String to = eventParts[2].trim();
+                    Task event = new Event(desc, from, to);
+                    taskList.add(event);
+                    System.out.println("ok. task added:\n  " + event);
+                    System.out.println("now you have " + taskList.size() + " task(s) in the list.");
+                    saveNow(storage, taskList);
+                } catch (Exception e) {
+                    System.out.println("oi.. invalid event format.\nuse: event <desc> /from <time> /to <time>");
+                }
+                break;
 
-                case "delete":
-                    try {
-                        int index = Integer.parseInt(argument) - 1;
-                        Task removedTask = taskList.remove(index);
-                        System.out.println("task:");
-                        System.out.println("  " + removedTask + "\nremoved.");
-                        System.out.println("now you have " + taskList.size() + " tasks in the list.");
-                    } catch (NumberFormatException e) {
-                        System.out.println("oi.. give valid task number pls.\nUsage: delete <number>");
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.println("task number out of range lah.");
-                    }
-                    break;
+            case "delete":
+                try {
+                    int index = Integer.parseInt(argument) - 1;
+                    Task removedTask = taskList.remove(index);
+                    System.out.println("task:");
+                    System.out.println("  " + removedTask + "\nremoved.");
+                    System.out.println("now you have " + taskList.size() + " tasks in the list.");
+                    saveNow(storage, taskList);
+                } catch (NumberFormatException e) {
+                    System.out.println("oi.. give valid task number pls.\nUsage: delete <number>");
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("task number out of range lah.");
+                }
+                break;
 
-                case "help":
-                    System.out.println("list:           shows your tasklist");
-                    System.out.println("todo:           adds a todo task. use: todo <desc>");
-                    System.out.println("deadline:       adds a deadline task. use: deadline <desc> /by <time>");
-                    System.out.println("event:          adds a event task. use: event <desc> /from <time> /to <time>");
-                    System.out.println("mark:           marks a task in the list. use: mark <number>");
-                    System.out.println("unmark:         unmarks a task in the list. use: unmark <number>");
-                    break;
+            case "help":
+                System.out.println("list:           shows your tasklist");
+                System.out.println("todo:           adds a todo task. use: todo <desc>");
+                System.out.println("deadline:       adds a deadline task. use: deadline <desc> /by <time>");
+                System.out.println("event:          adds a event task. use: event <desc> /from <time> /to <time>");
+                System.out.println("mark:           marks a task in the list. use: mark <number>");
+                System.out.println("unmark:         unmarks a task in the list. use: unmark <number>");
+                break;
 
-                default:
-                    if (!input.isEmpty()) {
-                        System.out.println("tsk what u saying. i don't understand");
-                    } else {
-                        System.out.println("oi.. enter something leh");
-                    }
-                    break;
+            default:
+                if (!input.isEmpty()) {
+                    System.out.println("tsk what u saying. i don't understand");
+                } else {
+                    System.out.println("oi.. enter something leh");
+                }
+                break;
             }
         }
         scanner.close();
+    }
+
+    private static void saveNow(Storage storage, TaskList taskList) {
+        storage.save(taskList.asList());
     }
 }

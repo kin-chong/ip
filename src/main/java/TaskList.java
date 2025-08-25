@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 public class TaskList {
     private final ArrayList<Task> items;
@@ -21,6 +24,10 @@ public class TaskList {
 
     public Task remove(int index) throws IndexOutOfBoundsException {
         return items.remove(index);
+    }
+
+    public List<Task> asList() {
+        return Collections.unmodifiableList(items);
     }
 
     public void listTasks() {
