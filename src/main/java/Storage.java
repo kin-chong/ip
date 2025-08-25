@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class Storage {
     private final Path file;
@@ -17,30 +18,42 @@ public class Storage {
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         try {
-            if (Files.notExists(file)) return tasks;
+            if (Files.notExists(file)) {
+                return tasks;
+            }
             List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
             for (String raw : lines) {
                 String line = raw.trim();
-                if (line.isEmpty()) continue;
+                if (line.isEmpty()) {
+                    continue;
+                }
                 String[] p = line.split("\\s*\\|\\s*");
-                if (p.length < 3) continue;
+                if (p.length < 3) {
+                    continue;
+                }
                 String type = p[0];
                 boolean done = "1".equals(p[1]);
                 String desc = p[2];
                 Task t;
                 switch (type) {
                 case "T":
-                    t = new Todo(desc); break;
+                    t = new Todo(desc);
+                    break;
                 case "D":
                     if (p.length < 4) continue;
-                    t = new Deadline(desc, p[3]); break;
+                    LocalDate by = LocalDate.parse(p[3]);
+                    t = new Deadline(desc, by);
+                    break;
                 case "E":
                     if (p.length < 5) continue;
-                    t = new Event(desc, p[3], p[4]); break;
+                    t = new Event(desc, p[3], p[4]);
+                    break;
                 default:
                     continue;
                 }
-                if (done) t.markAsDone();
+                if (done) {
+                    t.markAsDone();
+                }
                 tasks.add(t);
             }
         } catch (IOException ignored) {}
@@ -50,9 +63,13 @@ public class Storage {
     public void save(List<Task> tasks) {
         try {
             Path parent = file.getParent();
-            if (parent != null && Files.notExists(parent)) Files.createDirectories(parent);
+            if (parent != null && Files.notExists(parent)) {
+                Files.createDirectories(parent);
+            }
             List<String> lines = new ArrayList<>();
-            for (Task t : tasks) lines.add(t.toDataString());
+            for (Task t : tasks) {
+                lines.add(t.toDataString());
+            }
             Files.write(file, lines, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException ignored) {}
