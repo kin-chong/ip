@@ -5,6 +5,13 @@ import lazysourcea.task.TaskList;
 
 import java.util.Scanner;
 
+/**
+ * Handles all user interactions with the chatbot.
+ * <p>
+ * The {@code Ui} class is responsible for displaying messages,
+ * reading user input, and printing feedback for commands such
+ * as adding, deleting, marking, or listing tasks.
+ */
 public class Ui {
     private final Scanner scanner = new Scanner(System.in);
 
@@ -17,6 +24,9 @@ public class Ui {
                          |___/
             """;
 
+    /**
+     * Prints the welcome message, including the logo and basic instructions.
+     */
     public void showWelcome() {
         System.out.println("Hello from\n" + LOGO);
         System.out.println("-----------------------");
@@ -25,22 +35,41 @@ public class Ui {
         System.out.println("enter help for available commands");
     }
 
+    /**
+     * Prints the farewell message when exiting the chatbot.
+     */
     public void showBye() {
         System.out.print("bye.");
     }
 
+    /**
+     * Prints the command-line prompt symbol.
+     */
     public void prompt() {
         System.out.print(">>> ");
     }
 
+    /**
+     * Reads a command entered by the user.
+     *
+     * @return the trimmed command string
+     */
     public String readCommand() {
         return scanner.nextLine().trim();
     }
 
+    /**
+     * Prints an error message to the user.
+     *
+     * @param message error message to display
+     */
     public void showError(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Prints a list of available commands and their usage.
+     */
     public void showHelp() {
         System.out.println("list:           shows your tasklist");
         System.out.println("todo:           adds a todo task. use: todo <desc>");
@@ -52,29 +81,61 @@ public class Ui {
         System.out.println("bye:            exits the program");
     }
 
+    /**
+     * Prints a confirmation message when a task is added.
+     *
+     * @param task the task that was added
+     * @param size the new size of the task list
+     */
     public void showAdded(Task task, int size) {
         System.out.println("ok. task added:\n  " + task);
         System.out.println("now you have " + size + " task(s) in the list.");
     }
 
+    /**
+     * Prints a confirmation message when a task is deleted.
+     *
+     * @param task the task that was removed
+     * @param size the new size of the task list
+     */
     public void showDeleted(Task task, int size) {
         System.out.println("task:");
         System.out.println("  " + task + "\nremoved.");
         System.out.println("now you have " + size + " tasks in the list.");
     }
 
+    /**
+     * Prints a confirmation message when a task is marked as done.
+     *
+     * @param task the task that was marked
+     */
     public void showMarked(Task task) {
         System.out.println("task marked as done:\n " + task);
     }
 
+    /**
+     * Prints a confirmation message when a task is unmarked.
+     *
+     * @param task the task that was unmarked
+     */
     public void showUnmarked(Task task) {
         System.out.println("task unmarked:\n " + task);
     }
 
+    /**
+     * Prints the entire list of tasks.
+     *
+     * @param taskList the list of tasks to display
+     */
     public void showList(TaskList taskList) {
         taskList.listTasks();
     }
 
+    /**
+     * Prints a message when the input is empty or not understood.
+     *
+     * @param raw the raw user input
+     */
     public void showUnknownOrEmpty(String raw) {
         if (!raw.isEmpty()) {
             System.out.println("tsk what u saying. i don't understand");

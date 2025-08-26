@@ -15,13 +15,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+/**
+ * Handles saving and loading tasks from a file.
+ * <p>
+ * The {@code Storage} class ensures that tasks are persisted
+ * between runs of the chatbot by reading and writing them
+ * in a plain text format.
+ */
 public class Storage {
     private final Path file;
 
+    /**
+     * Creates a new {@code Storage} instance using the given path.
+     * <p>
+     * The path is constructed relative to the project directory.
+     *
+     * @param pathParts one or more path components (e.g. "data", "duke.txt")
+     */
     public Storage(String... pathParts) {
         this.file = Paths.get("", pathParts);
     }
 
+    /**
+     * Loads tasks from the save file.
+     * <p>
+     * If the file does not exist, an empty list is returned.
+     *
+     * @return a list of {@link Task} objects loaded from the file
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         try {
@@ -67,6 +88,13 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves the given list of tasks to the save file.
+     * <p>
+     * If the folder does not exist, it is created automatically.
+     *
+     * @param tasks the list of {@link Task} objects to save
+     */
     public void save(List<Task> tasks) {
         try {
             Path parent = file.getParent();
