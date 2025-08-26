@@ -59,7 +59,7 @@ public class Storage {
                     continue;
                 }
                 if (done) {
-                    t.markAsDone();
+                    t.isDone();
                 }
                 tasks.add(t);
             }

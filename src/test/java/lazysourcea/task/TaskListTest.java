@@ -9,28 +9,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TaskListTest {
 
     @Test
-    void add_increasesSizeAndStoresTask() {
+    void add_Task_increasesListSizeAndStoresTask() {
         TaskList list = new TaskList();
         Todo t = new Todo("read book");
-        list.add(t);
-        assertEquals(1, list.size());
-        assertSame(t, list.get(0));
+        list.addTask(t);
+        assertEquals(1, list.listSize());
+        assertSame(t, list.getTask(0));
     }
 
     @Test
-    void remove_returnsRemovedTaskAndShrinksList() {
+    void remove_Task_returnsRemovedTaskAndShrinksList() {
         TaskList list = new TaskList();
-        list.add(new Todo("A"));
-        list.add(new Todo("B"));
-        Task removed = list.remove(0);
-        assertEquals("[T][ ] B", list.get(0).toString());
-        assertEquals(1, list.size());
+        list.addTask(new Todo("A"));
+        list.addTask(new Todo("B"));
+        Task removed = list.removeTask(0);
+        assertEquals("[T][ ] B", list.getTask(0).toString());
+        assertEquals(1, list.listSize());
         assertTrue(removed.toString().contains("A"));
     }
 
     @Test
-    void get_outOfBounds_throws() {
+    void get_Task_outOfBounds_throws() {
         TaskList list = new TaskList();
-        assertThrows(IndexOutOfBoundsException.class, () -> list.get(0));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.getTask(0));
     }
 }

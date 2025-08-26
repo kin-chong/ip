@@ -20,7 +20,7 @@ public class lazysourcea {
 
         ArrayList<Task> loaded = storage.load();
         for (Task t : loaded) {
-            taskList.add(t);
+            taskList.addTask(t);
         }
 
         ui.showWelcome();
@@ -44,9 +44,9 @@ public class lazysourcea {
             case MARK:
                 // mark task as done
                 try {
-                    int index = parser.parseIndex(parsed.arg, taskList.size());
-                    Task t = taskList.get(index); // may throw IndexOutOfBoundsException
-                    t.markAsDone();
+                    int index = parser.parseIndex(parsed.arg, taskList.listSize());
+                    Task t = taskList.getTask(index); // may throw IndexOutOfBoundsException
+                    t.isDone();
                     ui.showMarked(t);
                     storage.save(taskList.asList());
                 } catch (NumberFormatException | IndexOutOfBoundsException e) {
@@ -57,9 +57,9 @@ public class lazysourcea {
             case UNMARK:
                 // unmark a previously marked task
                 try {
-                    int index = parser.parseIndex(parsed.arg, taskList.size());
-                    Task t = taskList.get(index); // may throw IndexOutOfBoundsException
-                    t.markAsNotDone();
+                    int index = parser.parseIndex(parsed.arg, taskList.listSize());
+                    Task t = taskList.getTask(index); // may throw IndexOutOfBoundsException
+                    t.isNotDone();
                     ui.showUnmarked(t);
                     storage.save(taskList.asList());
                 } catch (NumberFormatException | IndexOutOfBoundsException e) {
@@ -72,8 +72,8 @@ public class lazysourcea {
                     ui.showError("tsk.. todo description cannot empty.\nuse: todo <desc>");
                 } else {
                     Task todo = new Todo(parsed.arg);
-                    taskList.add(todo);
-                    ui.showAdded(todo, taskList.size());
+                    taskList.addTask(todo);
+                    ui.showAdded(todo, taskList.listSize());
                     storage.save(taskList.asList());
                 }
                 break;
@@ -82,8 +82,8 @@ public class lazysourcea {
                 try {
                     Parser.DeadlineArgs d = parser.parseDeadlineArgs(parsed.arg);
                     Task deadline = new Deadline(d.desc, d.by);
-                    taskList.add(deadline);
-                    ui.showAdded(deadline, taskList.size());
+                    taskList.addTask(deadline);
+                    ui.showAdded(deadline, taskList.listSize());
                     storage.save(taskList.asList());
                 } catch (Exception e) {
                     ui.showError("oi.. invalid deadline format.\nuse: deadline <desc> /by <time>"
@@ -95,8 +95,8 @@ public class lazysourcea {
                 try {
                     Parser.EventArgs ev = parser.parseEventArgs(parsed.arg);
                     Task event = new Event(ev.desc, ev.from, ev.to);
-                    taskList.add(event);
-                    ui.showAdded(event, taskList.size());
+                    taskList.addTask(event);
+                    ui.showAdded(event, taskList.listSize());
                     storage.save(taskList.asList());
                 } catch (Exception e) {
                     ui.showError("oi.. invalid event format.\nuse: event <desc> /from <time> /to <time>");
@@ -105,9 +105,9 @@ public class lazysourcea {
 
             case DELETE:
                 try {
-                    int index = parser.parseIndex(parsed.arg, taskList.size());
-                    Task removedTask = taskList.remove(index);
-                    ui.showDeleted(removedTask, taskList.size());
+                    int index = parser.parseIndex(parsed.arg, taskList.listSize());
+                    Task removedTask = taskList.removeTask(index);
+                    ui.showDeleted(removedTask, taskList.listSize());
                     storage.save(taskList.asList());
                 } catch (NumberFormatException e) {
                     ui.showError("oi.. give valid task number pls.\nUsage: delete <number>");

@@ -13,11 +13,11 @@ public class Task {
         return (isDone ? "X" : " ");
     }
 
-    public void markAsDone() {
+    public void isDone() {
         this.isDone = true;
     }
 
-    public void markAsNotDone() {
+    public void isNotDone() {
         this.isDone = false;
     }
 
