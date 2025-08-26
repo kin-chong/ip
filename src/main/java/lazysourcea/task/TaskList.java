@@ -26,7 +26,7 @@ public class TaskList {
      *
      * @param task the {@link Task} to be added
      */
-    public void add(Task task) {
+    public void addTask(Task task) {
         items.add(task);
     }
 
@@ -35,7 +35,7 @@ public class TaskList {
      *
      * @return the size of the task list
      */
-    public int size() {
+    public int listSize() {
         return items.size();
     }
 
@@ -46,7 +46,7 @@ public class TaskList {
      * @return the {@link Task} at the specified index
      * @throws IndexOutOfBoundsException if {@code index} is invalid
      */
-    public Task get(int index) throws IndexOutOfBoundsException {
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         return items.get(index);
     }
 
@@ -57,7 +57,7 @@ public class TaskList {
      * @return the removed {@link Task}
      * @throws IndexOutOfBoundsException if {@code index} is invalid
      */
-    public Task remove(int index) throws IndexOutOfBoundsException {
+    public Task removeTask(int index) throws IndexOutOfBoundsException {
         return items.remove(index);
     }
 
