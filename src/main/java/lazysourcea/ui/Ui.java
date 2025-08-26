@@ -1,3 +1,8 @@
+package lazysourcea.ui;
+
+import lazysourcea.task.Task;
+import lazysourcea.task.TaskList;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -15,7 +20,7 @@ public class Ui {
     public void showWelcome() {
         System.out.println("Hello from\n" + LOGO);
         System.out.println("-----------------------");
-        System.out.println("hi. i'm lazysourcea.\nwhat do you want to do?");
+        System.out.println("hi. i'm lazysourcea.lazysourcea.\nwhat do you want to do?");
         System.out.println("-----------------------");
         System.out.println("enter help for available commands");
     }

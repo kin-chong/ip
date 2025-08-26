@@ -7,7 +7,7 @@ Hello from
              |___/
 
 -----------------------
-hi. i'm lazysourcea.
+hi. i'm lazysourcea.lazysourcea.
 what do you want to do?
 -----------------------
 enter help for available commands

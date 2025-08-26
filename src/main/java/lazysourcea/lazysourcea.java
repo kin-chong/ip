@@ -1,3 +1,14 @@
+package lazysourcea;
+
+import lazysourcea.task.Task;
+import lazysourcea.task.Todo;
+import lazysourcea.task.Deadline;
+import lazysourcea.task.Event;
+import lazysourcea.task.TaskList;
+import lazysourcea.parser.Parser;
+import lazysourcea.storage.Storage;
+import lazysourcea.ui.Ui;
+
 import java.util.ArrayList;
 
 public class lazysourcea {
