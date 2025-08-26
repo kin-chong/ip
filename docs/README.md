@@ -1,4 +1,4 @@
-# lazysourcea User Guide
+# lazysourcea.lazysourcea User Guide
 
 // Update the title above to match the actual product name
 

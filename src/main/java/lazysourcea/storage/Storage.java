@@ -1,3 +1,10 @@
+package lazysourcea.storage;
+
+import lazysourcea.task.Deadline;
+import lazysourcea.task.Event;
+import lazysourcea.task.Task;
+import lazysourcea.task.Todo;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
