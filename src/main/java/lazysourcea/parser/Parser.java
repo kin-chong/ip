@@ -4,8 +4,22 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Parses raw user input into structured commands and arguments.
+ * <p>
+ * The {@code Parser} class is responsible for:
+ * <ul>
+ *   <li>Identifying the command type from a string.</li>
+ *   <li>Splitting arguments for tasks such as deadlines and events.</li>
+ *   <li>Parsing dates into {@link LocalDate} objects.</li>
+ *   <li>Validating indices when accessing tasks.</li>
+ * </ul>
+ */
 public class Parser {
 
+    /**
+     * Enumeration of supported command types.
+     */
     public enum CommandType {
         BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, HELP, UNKNOWN
     }
@@ -13,6 +27,12 @@ public class Parser {
     private static final DateTimeFormatter IN_ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter IN_SLASH = DateTimeFormatter.ofPattern("d/M/yyyy");
 
+    /**
+     * Parses a raw input string into a structured {@link Parsed} object.
+     *
+     * @param raw the raw user input string
+     * @return a {@code Parsed} object containing the command type, arguments, and raw input
+     */
     public Parsed parse(String raw) {
         if (raw == null) {
             raw = "";
@@ -23,6 +43,12 @@ public class Parser {
         return new Parsed(toType(cmd), arg, raw.trim());
     }
 
+    /**
+     * Maps a command word string to a {@link CommandType}.
+     *
+     * @param cmd the command word
+     * @return the corresponding {@code CommandType}, or {@code UNKNOWN} if not recognized
+     */
     private CommandType toType(String cmd) {
         switch (cmd) {
         case "bye":
@@ -48,6 +74,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the arguments for a deadline command.
+     * <p>
+     * Expected format: {@code <description> /by <date>}
+     *
+     * @param argument the full argument string after the "deadline" keyword
+     * @return a {@link DeadlineArgs} containing the description and due date
+     * @throws IllegalArgumentException if the description is empty or "/by" is missing
+     */
     public DeadlineArgs parseDeadlineArgs(String argument) {
         String[] parts = argument.split("/by", 2);
         if (parts.length < 2) {
@@ -61,6 +96,15 @@ public class Parser {
         return new DeadlineArgs(desc, by);
     }
 
+    /**
+     * Parses the arguments for an event command.
+     * <p>
+     * Expected format: {@code <description> /from <from> /to <to>}
+     *
+     * @param argument the full argument string after the "event" keyword
+     * @return an {@link EventArgs} containing the description, start, and end times
+     * @throws IllegalArgumentException if any required part is missing or blank
+     */
     public EventArgs parseEventArgs(String argument) {
         String[] parts = argument.split("/from|/to");
         if (parts.length < 3) {
@@ -75,6 +119,15 @@ public class Parser {
         return new EventArgs(desc, from, to);
     }
 
+    /**
+     * Parses a string index into a 0-based integer and validates bounds.
+     *
+     * @param argument the index string (1-based as entered by the user)
+     * @param upperExclusive the exclusive upper bound of valid indices
+     * @return the 0-based index
+     * @throws NumberFormatException if the argument is not a number
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     public int parseIndex(String argument, int upperExclusive) {
         int idx = Integer.parseInt(argument) - 1;
         if (idx < 0 || idx >= upperExclusive) {
@@ -83,6 +136,13 @@ public class Parser {
         return idx;
     }
 
+    /**
+     * Attempts to parse a date string in ISO or slash format.
+     *
+     * @param s the string to parse
+     * @return the parsed {@link LocalDate}
+     * @throws java.time.format.DateTimeParseException if parsing fails for both formats
+     */
     private LocalDate parseDate(String s) {
         try {
             return LocalDate.parse(s, IN_ISO);
@@ -91,6 +151,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Encapsulates the result of parsing a raw input string.
+     */
     public static class Parsed {
         public final CommandType type;
         public final String arg;
@@ -103,6 +166,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Encapsulates the parsed arguments for a deadline command.
+     */
     public static class DeadlineArgs {
         public final String desc;
         public final LocalDate by;
@@ -113,6 +179,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Encapsulates the parsed arguments for an event command.
+     */
     public static class EventArgs {
         public final String desc, from, to;
 
