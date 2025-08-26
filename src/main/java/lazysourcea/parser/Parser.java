@@ -21,7 +21,7 @@ public class Parser {
      * Enumeration of supported command types.
      */
     public enum CommandType {
-        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, HELP, UNKNOWN
+        BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, HELP, UNKNOWN, FIND
     }
 
     private static final DateTimeFormatter IN_ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -69,6 +69,8 @@ public class Parser {
             return CommandType.DELETE;
         case "help":
             return CommandType.HELP;
+        case "find":
+            return CommandType.FIND;
         default:
             return CommandType.UNKNOWN;
         }

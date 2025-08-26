@@ -116,6 +116,14 @@ public class lazysourcea {
                 }
                 break;
 
+            case FIND:
+                if (parsed.arg.isEmpty()) {
+                    ui.showError("usage: find <keyword>");
+                } else {
+                    ui.showFindResults(taskList, parsed.arg);
+                }
+                break;
+
             case HELP:
                 ui.showHelp();
                 break;
