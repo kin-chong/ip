@@ -75,6 +75,34 @@ public class Ui {
         taskList.listTasks();
     }
 
+    /**
+     * Displays all tasks whose description contains the given keyword.
+     * <p>
+     * The search is case-insensitive and matches any substring within
+     * the task's {@code toString()} representation. Results are shown
+     * in a numbered list, similar to {@link #showList(lazysourcea.task.TaskList)}.
+     * <p>
+     * If no tasks match the keyword, a placeholder message is printed.
+     *
+     * @param taskList the {@link lazysourcea.task.TaskList} to search
+     * @param keyword  the search keyword to look for in task descriptions
+     */
+    public void showFindResults(TaskList taskList, String keyword) {
+        System.out.println("ok found matches:");
+        int index = 1;
+        for (int i = 0; i < taskList.size(); i++) {
+            Task t = taskList.get(i);
+            if (t.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println(index + "." + t);
+                index++;
+            }
+        }
+        if (index == 1) {
+            System.out.println("(no matching tasks found)");
+        }
+    }
+
+
     public void showUnknownOrEmpty(String raw) {
         if (!raw.isEmpty()) {
             System.out.println("tsk what u saying. i don't understand");
