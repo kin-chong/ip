@@ -69,4 +69,12 @@ public class Ui {
     public void showList(TaskList taskList) {
         taskList.listTasks();
     }
+
+    public void showUnknownOrEmpty(String raw) {
+        if (!raw.isEmpty()) {
+            System.out.println("tsk what u saying. i don't understand");
+        } else {
+            System.out.println("oi.. enter something leh");
+        }
+    }
 }
