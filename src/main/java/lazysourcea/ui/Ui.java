@@ -146,8 +146,8 @@ public class Ui {
     public void showFindResults(TaskList taskList, String keyword) {
         System.out.println("ok found matches:");
         int index = 1;
-        for (int i = 0; i < taskList.size(); i++) {
-            Task t = taskList.get(i);
+        for (int i = 0; i < taskList.listSize(); i++) {
+            Task t = taskList.getTask(i);
             if (t.toString().toLowerCase().contains(keyword.toLowerCase())) {
                 System.out.println(index + "." + t);
                 index++;
