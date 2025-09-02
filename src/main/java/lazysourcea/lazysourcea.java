@@ -1,16 +1,28 @@
 package lazysourcea;
 
-import lazysourcea.task.Task;
-import lazysourcea.task.Todo;
-import lazysourcea.task.Deadline;
-import lazysourcea.task.Event;
-import lazysourcea.task.TaskList;
-import lazysourcea.parser.Parser;
-import lazysourcea.storage.Storage;
-import lazysourcea.ui.Ui;
-
 import java.util.ArrayList;
 
+import lazysourcea.parser.Parser;
+import lazysourcea.storage.Storage;
+import lazysourcea.task.Deadline;
+import lazysourcea.task.Event;
+import lazysourcea.task.Task;
+import lazysourcea.task.TaskList;
+import lazysourcea.task.Todo;
+import lazysourcea.ui.Ui;
+
+
+
+/**
+ * Application entry point for Lazysourcea.
+ *
+ * <p>Initializes the storage, task list, UI and parser, loads previously saved tasks,
+ * and runs the interactive command loop. Supported commands include:
+ * list, todo, deadline, event, mark, unmark, delete, find, help and bye.
+ *
+ * <p>Mutating commands persist changes to storage and UI is used for all user-facing output
+ * and error messages.
+ */
 public class lazysourcea {
     public static void main(String[] args) {
         Storage storage = new Storage("data", "lazysourcea.txt");
