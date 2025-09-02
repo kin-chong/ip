@@ -88,4 +88,16 @@ public class TaskList {
             }
         }
     }
+
+    public void listTasks(java.util.function.Consumer<String> out) {
+        if (listSize() == 0) {
+            out.accept("(no tasks yet)");
+            return;
+        }
+        out.accept("your tasks:");
+        for (int i = 0; i < listSize(); i++) {
+            out.accept(String.format("%d. %s", i + 1, getTask(i)));
+        }
+    }
+
 }
