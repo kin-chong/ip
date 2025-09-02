@@ -32,10 +32,10 @@ public class Ui {
             """;
 
     public void showWelcome() {
-        out.accept("Hello from\n" + LOGO);
-        out.accept("-----------------------");
-        out.accept("hi. i'm lazysourcea.lazysourcea.\nwhat do you want to do?");
-        out.accept("-----------------------");
+        //out.accept("Hello from\n" + LOGO);
+        //out.accept("-----------------------");
+        out.accept("hi. i'm lazysourcea.\nwhat do you want to do?");
+        //out.accept("-----------------------");
         out.accept("enter help for available commands");
     }
 

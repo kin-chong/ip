@@ -18,7 +18,16 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/view/MainWindow.fxml"));
             AnchorPane root = loader.load();
             loader.<MainWindow>getController().setCore(core);
-            stage.setScene(new Scene(root));
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+            stage.setMinWidth(1000);
+            stage.setMinHeight(800);
+            stage.setWidth(1000);
+            stage.setHeight(800);
+            stage.centerOnScreen();
+
             stage.setTitle("lazysourcea");
             stage.show();
         } catch (IOException e) {

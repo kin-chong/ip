@@ -262,4 +262,12 @@ public class lazysourcea {
     public boolean isExit() {
         return isExit;
     }
+
+    public String getWelcomeMessage() {
+        var sb = new StringBuilder();
+        var ui = new Ui(line -> { if (line != null) sb.append(line).append(System.lineSeparator()); });
+        ui.showWelcome();
+        return sb.toString().trim();
+    }
+
 }

@@ -14,10 +14,14 @@ import javafx.util.Duration;
 import lazysourcea.lazysourcea;
 
 public class MainWindow extends AnchorPane {
-    @FXML private ScrollPane scrollPane;
-    @FXML private VBox dialogContainer;
-    @FXML private TextField userInput;
-    @FXML private Button sendButton;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox dialogContainer;
+    @FXML
+    private TextField userInput;
+    @FXML
+    private Button sendButton;
 
     private lazysourcea core;
 
@@ -31,6 +35,9 @@ public class MainWindow extends AnchorPane {
 
     public void setCore(lazysourcea core) {
         this.core = core;
+        dialogContainer.getChildren().add(
+                DialogBox.getDukeDialog(core.getWelcomeMessage(), dukeImage)
+        );
     }
 
     @FXML
