@@ -11,7 +11,13 @@ import lazysourcea.task.TaskList;
 import lazysourcea.task.Todo;
 import lazysourcea.ui.Ui;
 
-
+/**
+ * Core engine for Lazysourcea: UI-agnostic and single-input driven, it loads and saves tasks via
+ * {@code Storage}, holds the in-memory {@code TaskList}, parses commands with {@code Parser}, and
+ * returns user-facing text for each call to {@link #getResponse(String)} (no printing or loops);
+ * {@link #getWelcomeMessage()} yields the startup greeting, and {@link #isExit()} flips to {@code true}
+ * after a "bye" command so the caller (e.g., JavaFX) can close the app.
+ */
 public class lazysourcea {
     // --- fields for shared core state ---
     private final Storage storage;
@@ -176,8 +182,9 @@ public class lazysourcea {
         case MARK:
             try {
                 int index = parser.parseIndex(parsed.arg, taskList.listSize());
+                assert index >= 0 && index < taskList.listSize() : "index out of bounds after parseIndex";
                 Task t = taskList.getTask(index);
-                t.isDone();
+                t.markDone();
                 storage.save(taskList.asList());
                 ui.showMarked(t);
             } catch (NumberFormatException | IndexOutOfBoundsException e) {
@@ -187,8 +194,9 @@ public class lazysourcea {
         case UNMARK:
             try {
                 int index = parser.parseIndex(parsed.arg, taskList.listSize());
+                assert index >= 0 && index < taskList.listSize() : "index out of bounds after parseIndex";
                 Task t = taskList.getTask(index);
-                t.isNotDone();
+                t.markNotDone();
                 storage.save(taskList.asList());
                 ui.showUnmarked(t);
             } catch (NumberFormatException | IndexOutOfBoundsException e) {

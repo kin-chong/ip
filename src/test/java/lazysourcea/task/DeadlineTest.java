@@ -20,7 +20,7 @@ public class DeadlineTest {
     void toDataString_savesIsoDate() {
         Deadline d = new Deadline("return book", LocalDate.of(2019, 12, 2));
         assertEquals("D | 0 | return book | 2019-12-02", d.toDataString());
-        d.isDone();
+        d.markDone();
         assertEquals("D | 1 | return book | 2019-12-02", d.toDataString());
     }
 }

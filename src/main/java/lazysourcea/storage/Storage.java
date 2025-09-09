@@ -80,7 +80,7 @@ public class Storage {
                     continue;
                 }
                 if (done) {
-                    t.isDone();
+                    t.markDone();
                 }
                 tasks.add(t);
             }

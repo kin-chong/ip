@@ -36,6 +36,7 @@ public class TaskList {
      * @return the size of the task list
      */
     public int listSize() {
+        assert items.size() >= 0 : "size negative";
         return items.size();
     }
 
