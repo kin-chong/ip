@@ -26,7 +26,7 @@ public class StorageTest {
         TaskList list = new TaskList();
         Task t1 = new Todo("read book");
         Task t2 = new Deadline("return book", LocalDate.of(2019, 12, 2));
-        t2.isDone();
+        t2.markDone();
         list.addTask(t1);
         list.addTask(t2);
 

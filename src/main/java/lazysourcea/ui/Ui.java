@@ -53,6 +53,7 @@ public class Ui {
     }
 
     public void showError(String message) {
+        assert message != null : "error message null";
         out.accept(message);
     }
 
@@ -68,6 +69,7 @@ public class Ui {
     }
 
     public void showAdded(Task task, int size) {
+        assert size >= 0 : "size negative";
         out.accept("ok. task added:\n  " + task);
         out.accept("now you have " + size + " task(s) in the list.");
     }
