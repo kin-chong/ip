@@ -3,6 +3,7 @@ package lazysourcea.task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Represents a mutable list of {@link Task} objects.
@@ -90,7 +91,12 @@ public class TaskList {
         }
     }
 
-    public void listTasks(java.util.function.Consumer<String> out) {
+    /**
+     * Prints all tasks in the list to standard output.
+     * <p>
+     * If the list is empty, a placeholder message is shown.
+     */
+    public void listTasks(Consumer<String> out) {
         if (listSize() == 0) {
             out.accept("(no tasks yet)");
             return;
