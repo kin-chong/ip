@@ -43,14 +43,20 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        if (input == null || input.trim().isEmpty()) return;
+        if (input == null || input.trim().isEmpty()) {
+            return;
+        }
 
         String response = core.getResponse(input);
 
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
+        var user = DialogBox.getUserDialog(input, userImage);
+        var bot  = DialogBox.getDukeDialog(response, dukeImage);
+
+        if (input.trim().toLowerCase().startsWith("help")) {
+            bot.withMonospace();
+        }
+
+        dialogContainer.getChildren().addAll(user, bot);
 
         userInput.clear();
         if (core.isExit()) {

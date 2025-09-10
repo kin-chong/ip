@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class Ui {
+    private static final int LEFT_W  = 40;  // width for the command column
+    private static final int TOTAL_W = 100;  // overall text width (monospace)
+    private static final int RIGHT_W = TOTAL_W - LEFT_W - 1; // -1 for the space between cols
+
     private final Scanner scanner = new Scanner(System.in);
 
     // NEW: output sink
@@ -68,18 +72,105 @@ public class Ui {
     }
 
     /**
-     * Shows the help menu.
+     * Shows a general help menu.
      */
     public void showHelp() {
-        out.accept("list:           shows your tasklist");
-        out.accept("todo:           adds a todo task. use: todo <desc>");
-        out.accept("deadline:       adds a deadline task. use: deadline <desc> /by <date>");
-        out.accept("event:          adds an event. use: event <desc> /from <time> /to <time>");
-        out.accept("mark:           marks a task. use: mark <number>");
-        out.accept("unmark:         unmarks a task. use: unmark <number>");
-        out.accept("delete:         deletes a task. use: delete <number>");
-        out.accept("bye:            exits the program");
+        out.accept("lazysourcea — Commands");
+        out.accept("");
+
+        out.accept("BASICS");
+        row("- help [command]", "Show general help or details for a command");
+        row("- list",           "Show all tasks");
+        row("- find <keyword>", "Search tasks by keyword (case-insensitive)");
+        row("- bye",            "Exit the program");
+        out.accept("");
+
+        out.accept("ADD TASKS");
+        row("- todo <desc>", "Add a todo");
+        row("- deadline <desc> /by <date>", "Add a deadline");
+        row("- event <desc> /from <time> /to <time>", "Add an event");
+        line("-- Date formats: yyyy-MM-dd  or  d/M/yyyy (e.g., 2019-10-15 or 2/12/2019)");
+        out.accept("");
+
+        out.accept("MANAGE TASKS");
+        row("- mark <n>",   "Mark task n as done");
+        row("- unmark <n>", "Mark task n as not done");
+        row("- delete <n>", "Delete task n");
+        out.accept("");
+
+        out.accept("Tip: type 'help <command>' for examples, e.g., 'help deadline'.");
     }
+
+    /**
+     * Shows a more detailed help menu when a command is entered after help.
+     * @param command the command for specific help
+     */
+    public void showHelp(String command) {
+        if (command == null || command.isBlank()) { showHelp(); return; }
+        switch (command.trim().toLowerCase()) {
+            case "help":
+                out.accept("help — show help");
+                out.accept("Usage: help [command]");
+                out.accept("Examples:");
+                out.accept("  help");
+                out.accept("  help deadline");
+                break;
+            case "list":
+                out.accept("list — show all tasks");
+                out.accept("Usage: list");
+                break;
+            case "find":
+                out.accept("find — search tasks by keyword");
+                out.accept("Usage: find <keyword>");
+                out.accept("Examples:");
+                out.accept("  find book");
+                out.accept("  find meeting");
+                break;
+            case "todo":
+                out.accept("todo — add a todo task");
+                out.accept("Usage: todo <desc>");
+                out.accept("Example: todo read book");
+                break;
+            case "deadline":
+                out.accept("deadline — add a task with a due date");
+                out.accept("Usage: deadline <desc> /by <date>");
+                out.accept("Date formats: yyyy-MM-dd  or  d/M/yyyy");
+                out.accept("Examples:");
+                out.accept("  deadline return book /by 2019-10-15");
+                out.accept("  deadline CS2103 iP v1 /by 2/12/2019");
+                break;
+            case "event":
+                out.accept("event — add a task with a start and end time");
+                out.accept("Usage: event <desc> /from <time> /to <time>");
+                out.accept("Examples:");
+                out.accept("  event project meeting /from 10:00 /to 12:00");
+                out.accept("  event camp /from 2019-12-01 /to 2019-12-03");
+                break;
+            case "mark":
+                out.accept("mark — mark a task as done");
+                out.accept("Usage: mark <n>");
+                out.accept("Example: mark 2");
+                break;
+            case "unmark":
+                out.accept("unmark — mark a task as not done");
+                out.accept("Usage: unmark <n>");
+                out.accept("Example: unmark 2");
+                break;
+            case "delete":
+                out.accept("delete — remove a task");
+                out.accept("Usage: delete <n>");
+                out.accept("Example: delete 3");
+                break;
+            case "bye":
+                out.accept("bye — exit the program");
+                out.accept("Usage: bye");
+                break;
+            default:
+                out.accept("Unknown command: " + command);
+                out.accept("Type 'help' to see available commands.");
+        }
+    }
+
 
     /**
      * Shows the task added.
@@ -120,8 +211,7 @@ public class Ui {
     }
 
     public void showList(TaskList taskList) {
-        taskList.listTasks(); // keep as-is if this already prints via System.out
-        // If you want this to also funnel through the sink, change TaskList to call a Consumer too.
+        taskList.listTasks();
     }
 
     /**
@@ -153,6 +243,67 @@ public class Ui {
             out.accept("tsk what u saying. i don't understand");
         } else {
             out.accept("oi.. enter something leh");
+        }
+    }
+
+    /**
+     * Wraps the given text into lines whose length does not exceed {@code width}.
+     * <p>
+     * The algorithm prefers breaking at the last space before the limit; if no
+     * space exists in range, it hard-wraps at the limit. Leading/trailing spaces
+     * are trimmed and any spaces at the wrap boundary are skipped so no line ends
+     * with whitespace. Returns at least one element; for {@code null} or blank
+     * input this is a single empty string.
+     *
+     * @param s     the text to wrap (may be {@code null})
+     * @param width the maximum line width (in characters), expected {@code >= 1}
+     * @return a list of wrapped lines in display order, each {@code <= width}
+     */
+    private static java.util.List<String> wrapToWidth(String s, int width) {
+        java.util.ArrayList<String> lines = new java.util.ArrayList<>();
+        if (s == null) { lines.add(""); return lines; }
+        s = s.trim();
+        if (s.isEmpty()) { lines.add(""); return lines; }
+
+        int i = 0, n = s.length();
+        while (i < n) {
+            int end = Math.min(i + width, n);
+            if (end < n) {
+                int sp = s.lastIndexOf(' ', end);
+                if (sp <= i) sp = end; // no space found; hard wrap
+                end = sp;
+            }
+            lines.add(s.substring(i, end).trim());
+            i = end;
+            while (i < n && s.charAt(i) == ' ') i++; // skip spaces at wrap
+        }
+        return lines;
+    }
+
+
+    /**
+     * Emit a two-column row with wrapping and alignment.
+     * @param left left column text
+     * @param right right column text
+     */
+    private void row(String left, String right) {
+        var L = wrapToWidth(left, LEFT_W);
+        var R = wrapToWidth(right, RIGHT_W);
+        int rows = Math.max(L.size(), R.size());
+        for (int i = 0; i < rows; i++) {
+            String l = (i < L.size()) ? L.get(i) : "";
+            String r = (i < R.size()) ? R.get(i) : "";
+            out.accept(String.format("%-" + LEFT_W + "s %s", l, r));
+        }
+    }
+
+    /**
+     * Emit a full-width line.
+     * @param text text to print
+     */
+    private void line(String text) {
+        for (String l : wrapToWidth(text, TOTAL_W)) {
+            out.accept(l);
         }
     }
 }

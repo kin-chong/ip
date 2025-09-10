@@ -49,4 +49,12 @@ public class DialogBox extends HBox {
         db.flip();
         return db;
     }
+
+    // DialogBox.java
+    public DialogBox withMonospace() {
+        // apply to the text label only
+        dialog.setStyle("-fx-font-family: 'Consolas','Menlo','Courier New',monospace; -fx-font-size: 12px; -fx-line-spacing: 2px;");
+        return this;
+    }
+
 }
