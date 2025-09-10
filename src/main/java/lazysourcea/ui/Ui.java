@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class Ui {
+    private static final int LEFT_W  = 40;  // width for the command column
+    private static final int TOTAL_W = 100;  // overall text width (monospace)
+    private static final int RIGHT_W = TOTAL_W - LEFT_W - 1; // -1 for the space between cols
+
     private final Scanner scanner = new Scanner(System.in);
 
     // NEW: output sink
@@ -67,29 +71,40 @@ public class Ui {
         out.accept(message);
     }
 
+    /**
+     * Shows a general help menu.
+     */
     public void showHelp() {
         out.accept("lazysourcea — Commands");
         out.accept("");
+
         out.accept("BASICS");
-        out.accept("  help [command]      Show general help or details for a command");
-        out.accept("  list                Show all tasks");
-        out.accept("  find <keyword>      Search tasks by keyword (case-insensitive)");
-        out.accept("  bye                 Exit the program");
+        row("- help [command]", "Show general help or details for a command");
+        row("- list",           "Show all tasks");
+        row("- find <keyword>", "Search tasks by keyword (case-insensitive)");
+        row("- bye",            "Exit the program");
         out.accept("");
+
         out.accept("ADD TASKS");
-        out.accept("  todo <desc>                               Add a todo");
-        out.accept("  deadline <desc> /by <date>                Add a deadline");
-        out.accept("  event <desc> /from <time> /to <time>      Add an event");
-        out.accept("  Date formats: yyyy-MM-dd  or  d/M/yyyy (e.g., 2019-10-15 or 2/12/2019)");
+        row("- todo <desc>", "Add a todo");
+        row("- deadline <desc> /by <date>", "Add a deadline");
+        row("- event <desc> /from <time> /to <time>", "Add an event");
+        line("-- Date formats: yyyy-MM-dd  or  d/M/yyyy (e.g., 2019-10-15 or 2/12/2019)");
         out.accept("");
+
         out.accept("MANAGE TASKS");
-        out.accept("  mark <n>            Mark task n as done");
-        out.accept("  unmark <n>          Mark task n as not done");
-        out.accept("  delete <n>          Delete task n");
+        row("- mark <n>",   "Mark task n as done");
+        row("- unmark <n>", "Mark task n as not done");
+        row("- delete <n>", "Delete task n");
         out.accept("");
+
         out.accept("Tip: type 'help <command>' for examples, e.g., 'help deadline'.");
     }
 
+    /**
+     * Shows a more detailed help menu when a command is entered after help.
+     * @param command the command for specific help
+     */
     public void showHelp(String command) {
         if (command == null || command.isBlank()) { showHelp(); return; }
         switch (command.trim().toLowerCase()) {
@@ -196,8 +211,7 @@ public class Ui {
     }
 
     public void showList(TaskList taskList) {
-        taskList.listTasks(); // keep as-is if this already prints via System.out
-        // If you want this to also funnel through the sink, change TaskList to call a Consumer too.
+        taskList.listTasks();
     }
 
     /**
@@ -229,6 +243,67 @@ public class Ui {
             out.accept("tsk what u saying. i don't understand");
         } else {
             out.accept("oi.. enter something leh");
+        }
+    }
+
+    /**
+     * Wraps the given text into lines whose length does not exceed {@code width}.
+     * <p>
+     * The algorithm prefers breaking at the last space before the limit; if no
+     * space exists in range, it hard-wraps at the limit. Leading/trailing spaces
+     * are trimmed and any spaces at the wrap boundary are skipped so no line ends
+     * with whitespace. Returns at least one element; for {@code null} or blank
+     * input this is a single empty string.
+     *
+     * @param s     the text to wrap (may be {@code null})
+     * @param width the maximum line width (in characters), expected {@code >= 1}
+     * @return a list of wrapped lines in display order, each {@code <= width}
+     */
+    private static java.util.List<String> wrapToWidth(String s, int width) {
+        java.util.ArrayList<String> lines = new java.util.ArrayList<>();
+        if (s == null) { lines.add(""); return lines; }
+        s = s.trim();
+        if (s.isEmpty()) { lines.add(""); return lines; }
+
+        int i = 0, n = s.length();
+        while (i < n) {
+            int end = Math.min(i + width, n);
+            if (end < n) {
+                int sp = s.lastIndexOf(' ', end);
+                if (sp <= i) sp = end; // no space found; hard wrap
+                end = sp;
+            }
+            lines.add(s.substring(i, end).trim());
+            i = end;
+            while (i < n && s.charAt(i) == ' ') i++; // skip spaces at wrap
+        }
+        return lines;
+    }
+
+
+    /**
+     * Emit a two-column row with wrapping and alignment.
+     * @param left left column text
+     * @param right right column text
+     */
+    private void row(String left, String right) {
+        var L = wrapToWidth(left, LEFT_W);
+        var R = wrapToWidth(right, RIGHT_W);
+        int rows = Math.max(L.size(), R.size());
+        for (int i = 0; i < rows; i++) {
+            String l = (i < L.size()) ? L.get(i) : "";
+            String r = (i < R.size()) ? R.get(i) : "";
+            out.accept(String.format("%-" + LEFT_W + "s %s", l, r));
+        }
+    }
+
+    /**
+     * Emit a full-width line.
+     * @param text text to print
+     */
+    private void line(String text) {
+        for (String l : wrapToWidth(text, TOTAL_W)) {
+            out.accept(l);
         }
     }
 }
