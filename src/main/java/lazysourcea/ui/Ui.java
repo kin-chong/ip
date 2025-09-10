@@ -67,19 +67,95 @@ public class Ui {
         out.accept(message);
     }
 
-    /**
-     * Shows the help menu.
-     */
     public void showHelp() {
-        out.accept("list:           shows your tasklist");
-        out.accept("todo:           adds a todo task. use: todo <desc>");
-        out.accept("deadline:       adds a deadline task. use: deadline <desc> /by <date>");
-        out.accept("event:          adds an event. use: event <desc> /from <time> /to <time>");
-        out.accept("mark:           marks a task. use: mark <number>");
-        out.accept("unmark:         unmarks a task. use: unmark <number>");
-        out.accept("delete:         deletes a task. use: delete <number>");
-        out.accept("bye:            exits the program");
+        out.accept("lazysourcea — Commands");
+        out.accept("");
+        out.accept("BASICS");
+        out.accept("  help [command]      Show general help or details for a command");
+        out.accept("  list                Show all tasks");
+        out.accept("  find <keyword>      Search tasks by keyword (case-insensitive)");
+        out.accept("  bye                 Exit the program");
+        out.accept("");
+        out.accept("ADD TASKS");
+        out.accept("  todo <desc>                               Add a todo");
+        out.accept("  deadline <desc> /by <date>                Add a deadline");
+        out.accept("  event <desc> /from <time> /to <time>      Add an event");
+        out.accept("  Date formats: yyyy-MM-dd  or  d/M/yyyy (e.g., 2019-10-15 or 2/12/2019)");
+        out.accept("");
+        out.accept("MANAGE TASKS");
+        out.accept("  mark <n>            Mark task n as done");
+        out.accept("  unmark <n>          Mark task n as not done");
+        out.accept("  delete <n>          Delete task n");
+        out.accept("");
+        out.accept("Tip: type 'help <command>' for examples, e.g., 'help deadline'.");
     }
+
+    public void showHelp(String command) {
+        if (command == null || command.isBlank()) { showHelp(); return; }
+        switch (command.trim().toLowerCase()) {
+            case "help":
+                out.accept("help — show help");
+                out.accept("Usage: help [command]");
+                out.accept("Examples:");
+                out.accept("  help");
+                out.accept("  help deadline");
+                break;
+            case "list":
+                out.accept("list — show all tasks");
+                out.accept("Usage: list");
+                break;
+            case "find":
+                out.accept("find — search tasks by keyword");
+                out.accept("Usage: find <keyword>");
+                out.accept("Examples:");
+                out.accept("  find book");
+                out.accept("  find meeting");
+                break;
+            case "todo":
+                out.accept("todo — add a todo task");
+                out.accept("Usage: todo <desc>");
+                out.accept("Example: todo read book");
+                break;
+            case "deadline":
+                out.accept("deadline — add a task with a due date");
+                out.accept("Usage: deadline <desc> /by <date>");
+                out.accept("Date formats: yyyy-MM-dd  or  d/M/yyyy");
+                out.accept("Examples:");
+                out.accept("  deadline return book /by 2019-10-15");
+                out.accept("  deadline CS2103 iP v1 /by 2/12/2019");
+                break;
+            case "event":
+                out.accept("event — add a task with a start and end time");
+                out.accept("Usage: event <desc> /from <time> /to <time>");
+                out.accept("Examples:");
+                out.accept("  event project meeting /from 10:00 /to 12:00");
+                out.accept("  event camp /from 2019-12-01 /to 2019-12-03");
+                break;
+            case "mark":
+                out.accept("mark — mark a task as done");
+                out.accept("Usage: mark <n>");
+                out.accept("Example: mark 2");
+                break;
+            case "unmark":
+                out.accept("unmark — mark a task as not done");
+                out.accept("Usage: unmark <n>");
+                out.accept("Example: unmark 2");
+                break;
+            case "delete":
+                out.accept("delete — remove a task");
+                out.accept("Usage: delete <n>");
+                out.accept("Example: delete 3");
+                break;
+            case "bye":
+                out.accept("bye — exit the program");
+                out.accept("Usage: bye");
+                break;
+            default:
+                out.accept("Unknown command: " + command);
+                out.accept("Type 'help' to see available commands.");
+        }
+    }
+
 
     /**
      * Shows the task added.
