@@ -114,6 +114,6 @@ If an ambiguous or invalid date/time is provided, the application will report an
 ---
 ## Contact and contribution
 
-If you find bugs or want to suggest improvements, open an issue in the <a href=https://github.com/kin-chong/ip>project repository</a>. Contributions such as documentation updates, bug fixes, and feature requests are typically welcomed.
+If you find bugs or want to suggest improvements, open an issue in the [project repository](https://github.com/kin-chong/ip). Contributions such as documentation updates, bug fixes, and feature requests are typically welcomed.
 
 Tip: when filing an issue, include the exact command you ran, the error output, and the version of the application shown on startup.
