@@ -25,6 +25,16 @@ public class DialogBox extends HBox {
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
+
+            final double AVATAR = 50; // pick your size
+            displayPicture.setFitWidth(AVATAR);
+            displayPicture.setFitHeight(AVATAR);
+            displayPicture.setSmooth(true);
+
+            // circular crop
+            javafx.scene.shape.Circle clip =
+                    new javafx.scene.shape.Circle(AVATAR / 2, AVATAR / 2, AVATAR / 2);
+            displayPicture.setClip(clip);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,7 +46,7 @@ public class DialogBox extends HBox {
         ObservableList<Node> tmp = FXCollections.observableArrayList(getChildren());
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
-        setAlignment(Pos.TOP_LEFT);
+        setAlignment(Pos.BOTTOM_LEFT);
         dialog.getStyleClass().add("reply-label");
     }
 

@@ -1,5 +1,7 @@
 package lazysourcea.ui.javafx;
 
+
+import javafx.scene.image.Image;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,10 @@ public class MainApp extends Application {
 
             Scene scene = new Scene(root);
             stage.setScene(scene);
+
+            // set window icon (resource path from src/main/resources)
+            Image icon = new Image(MainApp.class.getResourceAsStream("/images/app_icon.png"));
+            stage.getIcons().add(icon);
 
             stage.setMinWidth(1000);
             stage.setMinHeight(800);

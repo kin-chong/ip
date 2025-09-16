@@ -6,6 +6,20 @@ import lazysourcea.task.TaskList;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+/**
+ * Simple UI helper for the lazysourcea application.
+ *
+ * <p>Handles reading a trimmed command line from stdin and emitting textual
+ * output via an output sink ({@code Consumer<String>}), which defaults to
+ * {@code System.out::println} but can be injected for testing or GUI use.</p>
+ *
+ * <p>Provides methods to show welcome/bye messages, errors, help text,
+ * task notifications (add/delete/mark/unmark), listing/find results, and
+ * small formatting utilities for wrapping and two-column rows.</p>
+ *
+ * @see java.util.function.Consumer
+ * @see java.util.Scanner
+ */
 public class Ui {
     private static final int LEFT_W  = 40;  // width for the command column
     private static final int TOTAL_W = 100;  // overall text width (monospace)
